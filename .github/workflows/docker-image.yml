@@ -33,20 +33,23 @@ jobs:
         NEW_VERSION: ${{ steps.version.outputs.version }}
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-        echo "new version: $NEW_VERSION" 
         
     - name: Git Semantic Version
       uses: PaulHatch/semantic-version@v4.0.3
         
-#     - name: Build Docker image
-#       run: |
-#         docker build -t fcanigia/docker-graphql:0.0.2 .
-#         docker build -t fcanigia/docker-graphql:latest .
+    - name: Build Docker image
+      env: 
+        NEW_VERSION: ${{ steps.version.outputs.version }}
+      run: |
+        docker build -t fcanigia/docker-graphql:$NEW_VERSION .
+        docker build -t fcanigia/docker-graphql:latest .
         
-#     - name: Push Docker image
-#       run: |
-#         docker push fcanigia/docker-graphql:0.0.2
-#         docker push fcanigia/docker-graphql:latest
+    - name: Push Docker image
+      env: 
+        NEW_VERSION: ${{ steps.version.outputs.version }}
+      run: |
+        docker push fcanigia/docker-graphql:$NEW_VERSION
+        docker push fcanigia/docker-graphql:latest
         
         
         
